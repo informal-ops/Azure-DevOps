@@ -1,4 +1,16 @@
 # Starter pipeline
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'enmaxtraining_sc'
+    subscriptionId: '4ecbfc9e-1005-4884-8e56-7fea16f1a054'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'enmaxtraning'
+    location: 'East US'
+    templateLocation: 'Linked artifact'
+    csmFile: 'nsg.json'
+    csmParametersFile: 'nsg.parameters.json'
+    deploymentMode: 'Incremental'
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
