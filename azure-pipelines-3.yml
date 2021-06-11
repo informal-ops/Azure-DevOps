@@ -26,6 +26,6 @@ steps:
     resourceGroupName: 'enmaxtraning'
     location: 'East Us'
     templateLocation: 'URL of the file'
-    csmFileLink: 'nsg.json'
-    csmParametersFileLink: 'nsg.parameters.json'
+    csmFileLink: 'blob/main/nsg.json'
+    csmParametersFileLink: 'blob/main/nsg.parameters.json'
     deploymentMode: 'Incremental'
