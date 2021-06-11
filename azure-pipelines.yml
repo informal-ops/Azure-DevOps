@@ -38,3 +38,15 @@ steps:
     csmFile: 'vnet.json'
     csmParametersFile: 'vnet.parameters.json'
     deploymentMode: 'Incremental'
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'enmaxtraining_sc'
+    subscriptionId: '4ecbfc9e-1005-4884-8e56-7fea16f1a054'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'enmaxtraning'
+    location: 'East US'
+    templateLocation: 'Linked artifact'
+    csmFile: 'virtualmachine.json'
+    csmParametersFile: 'virtualmachine.parameters.json'
+    deploymentMode: 'Incremental'
