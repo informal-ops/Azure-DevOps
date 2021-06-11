@@ -27,6 +27,6 @@ steps:
     resourceGroupName: 'enmaxtraning'
     location: 'East US'
     templateLocation: 'Linked artifact'
-    csmFile: 'https://raw.githubusercontent.com/informal-ops/Azure-DevOps/main/nsg.json'
-    csmParametersFile: 'https://raw.githubusercontent.com/informal-ops/Azure-DevOps/main/nsg.parameters.json'
+    csmFile: 'nsg.json'
+    csmParametersFile: 'nsg.parameters.json'
     deploymentMode: 'Incremental'
