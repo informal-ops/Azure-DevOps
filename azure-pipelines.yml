@@ -1,6 +1,4 @@
 # Starter pipeline
-
-
 trigger:
 - main
 
