@@ -1,0 +1,66 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "vnetname": {
+        "type": "string"
+      },
+      "sub1name": {
+        "type": "string"
+      },
+      "sub2name": {
+        "type": "string"
+      },
+      "VnetAddressPrefix": {
+        "type": "string"
+      },
+      "Subnet1AddressPrefix": {
+        "type": "string"
+      },
+      "Subnet2AddressPrefix": {
+        "type": "string"
+      }
+    },
+    "functions": [],
+    "variables": {
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2020-11-01",
+            "location":"[resourceGroup().location]",
+            "name":"[parameters('vnetname')]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes":["[parameters('VnetAddressPrefix')]"]
+                }
+            },
+            "resources": [
+              {
+                "type": "subnets",
+                "apiVersion": "2020-11-01",
+                "name": "[parameters('sub1name')]",
+                "properties": {
+                  "addressPrefix": "[parameters('Subnet1AddressPrefix')]"  
+                },
+                "dependsOn": [
+                  "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetname'))]"
+                ]
+              },
+              {
+                "type": "subnets",
+                "apiVersion": "2020-11-01",
+                "name": "[parameters('sub2name')]",
+                "properties": {
+                  "addressPrefix": "[parameters('Subnet2AddressPrefix')]"
+                  },
+                "dependsOn": [
+                  "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetname'))]",
+                  "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetname'), parameters('sub1name'))]"
+                ]
+              }
+            ]
+        }
+    ],
+    "outputs": {}
+}

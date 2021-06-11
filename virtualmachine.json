@@ -1,0 +1,139 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vmname": {
+            "type": "string",
+            "minLength":2,
+            "maxLength":10
+        },
+        "vmsize": {
+            "type": "string",
+            "defaultValue": "Standard_B1s"
+        },
+        "adminpassword": {
+            "type": "securestring"
+        },
+        "adminusername": {
+            "type": "string"
+        },
+        "OSVersion": {
+      "type": "string",
+      "defaultValue": "2012-R2-Datacenter",
+      "allowedValues": [
+        "2008-R2-SP1",
+        "2012-Datacenter",
+        "2012-R2-Datacenter",
+        "Windows-Server-Technical-Preview"
+      ]
+        },
+        "Vnet-Name": {
+            "type": "string"
+        },
+        "Subnet-Name": {
+            "type": "string"
+        },
+        "NSG-Name": {
+            "type": "string",
+            "metadata": {
+                "description": "Give your NSG name"
+            }
+        }
+    },
+    "functions": [],
+    "variables": {
+        "vnetid":"[resourceId('enmaxtraning', 'Microsoft.Network/virtualNetworks', parameters('Vnet-Name'))]",
+        "subnetid":"[concat(variables('vnetid'), '/subnets/', parameters('Subnet-Name'))]",
+        "nsgid": "[resourceId('enmaxtraning', 'Microsoft.Network/networkSecurityGroups', parameters('NSG-Name'))]",
+        "NIC-Name":"[concat(parameters('vmname'),'-NIC')]",
+        "ip-name":"[concat(parameters('vmname'),'-PublicIp')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2020-11-01",
+            "location":"[resourceGroup().location]",
+            "name":"[variables('NIC-Name')]",
+            "dependsOn": [
+                    "[resourceId('Microsoft.Network/publicIpAddresses', variables('ip-name'))]"
+            ],
+            "properties":{
+                "networkSecurityGroup": {
+                    "id" : "[variables('nsgid')]"
+                },
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig",
+                        "properties": {
+                            "publicIPAddress": {
+                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', variables('ip-name'))]"
+                            },
+                            "privateIPAddressVersion": "IPv4",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet":{
+                                "id": "[variables('subnetid')]"
+                            }
+                        }
+                    }
+                ]
+            
+        }
+        },
+        {
+            "name": "[variables('ip-name')]",
+            "type": "Microsoft.Network/publicIpAddresses",
+            "apiVersion": "2019-02-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "publicIpAllocationMethod": "Dynamic" 
+            },
+            "sku": {
+                "name": "Basic"
+            }
+        },
+            {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2020-12-01",
+            "location": "East US",
+            "name":"[parameters('vmname')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('NIC-Name'))]"
+            ],
+            "tags": {
+                "Test": "Testing"
+            },
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('vmsize')]"
+                },
+                "osProfile": {
+                    "computerName": "[parameters('vmname')]",
+                    "adminPassword":"[parameters('adminpassword')]",
+                    "adminUsername": "[parameters('adminusername')]"  
+                },
+                "networkProfile":{
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('NIC-Name'))]"
+                        }
+                    ]
+                },
+                 "storageProfile": {
+          "imageReference": {
+            "publisher": "MicrosoftWindowsServer",
+            "offer": "WindowsServer",
+            "sku": "[parameters('OSVersion')]",
+            "version": "latest"
+          },
+          "osDisk": {
+              "createOption": "FromImage",
+              "managedDisk": {
+                  "storageAccountType": "Standard_LRS"
+              }
+          }
+            }
+            }
+         }
+    ],
+    "outputs": {}
+}
