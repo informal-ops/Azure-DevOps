@@ -14,9 +14,39 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
-- task: AzureCLI@2
+- task: AzureResourceManagerTemplateDeployment@3
   inputs:
-    azureSubscription: 'enmaxtraining_sc'
-    scriptType: 'ps'
-    scriptLocation: 'inlineScript'
-    inlineScript: 'az storage account create –name gitsstorage –resource-group enmaxtraning –location WestEurope –sku Standard_LRS –kind StorageV2'
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'enmaxtraining_sc'
+    subscriptionId: '4ecbfc9e-1005-4884-8e56-7fea16f1a054'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'enmaxtraning'
+    location: 'Australia Central'
+    templateLocation: 'Linked artifact'
+    csmFile: 'nsg.json'
+    csmParametersFile: 'nsg.parameters.json'
+    deploymentMode: 'Incremental'
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'enmaxtraining_sc'
+    subscriptionId: '4ecbfc9e-1005-4884-8e56-7fea16f1a054'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'enmaxtraning'
+    location: 'Australia Central'
+    templateLocation: 'Linked artifact'
+    csmFile: 'vnet.json'
+    csmParametersFile: 'vnet.parameters.json'
+    deploymentMode: 'Incremental'
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'enmaxtraining_sc'
+    subscriptionId: '4ecbfc9e-1005-4884-8e56-7fea16f1a054'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'enmaxtraning'
+    location: 'Australia Central'
+    templateLocation: 'Linked artifact'
+    csmFile: 'virtualmachine.json'
+    csmParametersFile: 'virtualmachine.parameters.json'
+    deploymentMode: 'Incremental'
