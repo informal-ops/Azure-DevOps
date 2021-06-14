@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "serverName": {
-            "value": "devops-sql" 
+            "value": "devops-demoserver" 
         },
         "sqlDBName": {
-            "value": "devops-Database"
+            "value": "devops-demodb"
         },
         "location": {
             "value": "westus"
