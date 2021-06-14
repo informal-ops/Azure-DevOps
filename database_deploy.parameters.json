@@ -9,7 +9,7 @@
             "value": "devops-Database"
         },
         "location": {
-            "value": "[resourceGroup().location]"
+            "value": "westus"
         },
         "administratorLogin": {
             "value": "rootuser"
