@@ -14,7 +14,9 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
-- task: PythonScript@0
+- task: AzureCLI@2
   inputs:
-    scriptSource: 'inline'
-    script: 'print("Hellooooo")'
+    azureSubscription: 'enmaxtraining_sc'
+    scriptType: 'ps'
+    scriptLocation: 'inlineScript'
+    inlineScript: 'az storage account create –name gitsstorage –resource-group enmaxtraning –location WestEurope –sku Standard_LRS –kind StorageV2'
