@@ -1,0 +1,56 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "serverName":{
+            "type": "string"
+        },
+        "sqlDBName": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        },
+        "administratorLogin": {
+            "type": "string"
+        },
+        "administratorLoginPassword": {
+            "type": "securestring"
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+            "name": "[parameters('serverName')]",
+            "type": "Microsoft.Sql/servers",
+            "apiVersion": "2020-02-02-preview",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "[parameters('serverName')]"
+            },
+            "properties": {
+                "administratorLogin": "[parameters('administratorLogin')]",
+                "administratorLoginPassword": "[parameters('administratorLoginPassword')]"
+            },
+            "resources": [
+                {
+                    "name": "[parameters('sqlDBName')]",
+                    "type": "databases",
+                    "apiVersion": "2020-08-01-preview",
+                    "location": "[parameters('serverName')]",
+                    "tags": {
+                        "displayName": "[parameters('sqlDBName')]"
+                    },
+                    "sku":{
+                        "name":"basic",
+                        "tier":"Basic"
+                    },
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Sql/servers', concat(parameters('serverName')))]"
+                    ]
+                }
+            ]
+        }
+    ]
+}
