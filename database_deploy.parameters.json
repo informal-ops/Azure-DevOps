@@ -9,7 +9,7 @@
             "value": "devops-Database"
         },
         "location": {
-            "value": "resourceGroup().location"
+            "value": "[resourceGroup().location]"
         },
         "administratorLogin": {
             "value": "rootuser"
